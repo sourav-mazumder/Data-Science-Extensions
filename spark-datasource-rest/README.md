@@ -37,6 +37,38 @@ For calling the target Rest service this library supports several options:
 * `schemaSamplePcnt` : Percentage of number of records in the input table to be used to infer teh schema. The default is "30" and minimum is 3. Incarese this number in case you are getting error or the schema is not propery inferred.
 * `callStrictlyOnce` : This value is used to ensure if the backend API would be called only once for each input value or not. The default is "N". In that case the back end API may get called for multiple times - once for inferring the schema and then for other operations. If this value is set to "Y" the backend API would be called only once (during infering the schema) for all of the input data points and would be cached. This option is useful when the target APIs are paid service or does not support calls per day/per hour beyond certain number. However, the results would be cached which will increase the memory usage.
 
+## Typical Structure of the Dataframe returned by Rest Data Source
+
+The dataframe created by this Rest Data Source will return a set of Rows of same Structure. The Structure internally will contain the input fields with the names same as those passed through the input table. The structure will also contain the output returned by the target Rest API under the field 'output'. Whatever gets returned within 'output' field would be specific to the Rest API being called. But the structure of the same can be easily obtained by printSchema method of Dataframe.
+
+Here below goes an example of the structure retutned by Rest Data Source when the target Rest API was [Watson API for Natural Language Understanding (with sentiment as feature)] (https://www.ibm.com/watson/developercloud/natural-language-understanding/api/v1/).
+
+```scala
+
+root
+ |-- output: struct (nullable = true)
+ |    |-- code: long (nullable = true)
+ |    |-- error: string (nullable = true)
+ |    |-- language: string (nullable = true)
+ |    |-- retrieved_url: string (nullable = true)
+ |    |-- sentiment: struct (nullable = true)
+ |    |    |-- document: struct (nullable = true)
+ |    |    |    |-- label: string (nullable = true)
+ |    |    |    |-- score: double (nullable = true)
+ |    |-- usage: struct (nullable = true)
+ |    |    |-- features: long (nullable = true)
+ |    |    |-- text_characters: long (nullable = true)
+ |    |    |-- text_units: long (nullable = true)
+ |-- q: string (nullable = true)
+ |-- url: string (nullable = true)
+ 
+ ```
+ 
+In this example 'q' and 'url' are the input parameters passed for each data point. So the Temporary Spark Table, that used as input table, had two columns - 'q' and 'url'. Each row of that table had different values for 'q' and 'url'. The 'output' field contains the result returned by the Wtson API for natural language understanding. 
+
+Sometimes there could be an additional field under root, namely '_corrupt_records'. This field will contain the outputs for the records for which the API returned an error.
+
+
 ## Examples
 
 The examples below shows how to use this Rest Data Source for SODA api. The examples here get the Socrata dataset using SODA API. The columns in the Socrata dataset is presented by a field in the SODA API. Records are searched for using filters and SoQL queries (https://dev.socrata.com/docs/queries/). We will be using the filters with our API call.
@@ -89,12 +121,23 @@ spark.sql("select source, region, inline(output) from sodastbl").show()
 
 ### Python API
 
+This time we are reading the input data points from a csv file - sodainput.csv. The csv file contains two coloumns - 'region' and 'source'. And it has 3 rows with different values for these 2 columns. We shall call the API for these 3 sets of input data points with different values of 'region' and 'source'. The 'region' and 'source' are two filters supported by the SODA API for Socrata data source. 
+
+The csv file should look like this -
+
+region,source
+Nevada,nn
+Northern California,pr
+Virgin Islands region,pr
+
+Please ensure that the csv file doen not have any space in between the column names as well as in between the values for those columns in the rows.
+
 ```python
 
 # Create the target url string for Soda API for Socrata data source
 sodauri = 'https://soda.demo.socrata.com/resource/6yvf-kk3n.json'
 
-# This time we are reading the input data points from a csv file - sodainput.csv. The csv file contains two coloumns - 'region' and 'source'. And it has 3 rows with different values for these 2 columns. We shall call the API for these 3 sets of input data points with different values of 'region' and 'source'. The 'region' and 'source' are two filters supported by the SODA API for Socrata data source. Please ensure that the csv file doen not have any space in between the column names as well as in between the values for those columns in the rows.
+# Now we are going to read the data from the csv file
 
 sodainputDf = spark.read.option('header', 'true').csv('/home/biadmin/spark-enablement/datasets/sodainput.csv')
 
@@ -124,12 +167,14 @@ spark.sql("select source, region, inline(output) from sodastbl").show()
 
 ### R API
 
+We shall use the same csv file for the input data as in case of the Pythin example
+
 ```R
 
 # Create the target url string for Soda API for Socrata data source
 sodauri <- "https://soda.demo.socrata.com/resource/6yvf-kk3n.json"
 
-# This time we are reading the input data points from a csv file - sodainput.csv. The csv file contains two coloumns - 'region' and 'source'. And it has 3 rows with different values for these 2 columns. We shall call the API for these 3 sets of input data points with different values of 'region' and 'source'. The 'region' and 'source' are two filters supported by the SODA API for Socrata data source. Please ensure that the csv file doen not have any space in between the column names as well as in between the values for those columns in the rows.
+# Now we are going to read the data from the csv file in a dataframe
 
 sodainputDf <- read.df("/home/biadmin/spark-enablement/datasets/sodainput.csv", "csv", header = "true", inferSchema = "true", na.strings = "NA")
 
