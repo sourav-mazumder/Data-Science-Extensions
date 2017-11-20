@@ -1,4 +1,4 @@
-# DataScienceExtensions
+# Data Science Extensions
 
 This repository contains libraries/components/notebooks those
 - foster new ideas in the data science field and also
