@@ -1,6 +1,6 @@
 # Rest Data Source for Apache Spark
 
-- his is a library for calling REST based services/APIs for multiple sets of input parameters in parallel and collating the results, returned by the REST service, in a Dataframe.
+- This is a library for calling REST based services/APIs for multiple sets of input parameters in parallel and collating the results, returned by the REST service, in a Dataframe.
 
 - REST based services (for example Address Validation services, Google Search API, Watson Natural Language Processing API, etc.) typically take only one set of input parameters at a time and return the corresponding record(s). However, for many Data Science problems, the same API needs to be called multiple times to account for a large set of different input parameters (e.g. validating the addresses for a set of target customers; getting personality insights from thousands of Tweets; obtaining Provider's details from the NPI registry for a list of potential Doctors, etc.
 
