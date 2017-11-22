@@ -14,7 +14,16 @@ This library requires Spark 2.0+ .
 
 This library depends on [scalaj_http](https://github.com/scalaj/scalaj-http) package
 
-## Using with Spark shell
+
+## Building the jar file
+
+Clone/Download this repository in your local system. Go the parent folder (the one which has 'spark-datasource-rest' as one of the sub folders). From the parent older run the command below. This command will create a 'target' folder under the folder 'spark-datasource-rest'. The 'target' folder would have the spark-datasource-rest_2.11-2.1.0-SNAPSHOT.jar which now you can use with any Spark cluster.
+
+```
+mvn clean install -pl spark-datasource-rest -DskipTests -Dscalastyle.skip=true
+```
+
+## Using the jar file with Spark shell
 This package can be added to  Spark using the `--packages` of `--jars` command line option.  For example, to include it when starting the spark shell as jar from the same folder use :
 
 ```
@@ -69,7 +78,7 @@ In this example 'q' and 'url' are the input parameters passed for each data poin
 Sometimes there could be an additional field under root, namely '_corrupt_records'. This field will contain the outputs for the records for which the API returned an error.
 
 
-## Examples
+## Examples (to try out with Spark Shell)
 
 The examples below shows how to use this Rest Data Source for SODA api. The examples here get the Socrata dataset using SODA API. The columns in the Socrata dataset is presented by a field in the SODA API. Records are searched for using filters and SoQL queries (https://dev.socrata.com/docs/queries/). We will be using the filters with our API call.
 
@@ -196,3 +205,45 @@ sodas2df <- sql("select source, region, inline(output) from sodastbl")
 
 head(sodas2df)
 
+``` 
+
+
+## Using Rest Data Source in IBM Data Science Experience (DSx)
+
+Here is a quick way to try out this Data Source using free version of IBM Data Science Experience
+
+1. At first get your free account in Data Scienece Experience (DSx)
+
+Use this [link](https://datascience.ibm.com/) to get your free account for Data Science Experience. It by default comes with a Spark Cluster where you can try out this Data Source. This also automatically creates an IBM Cloud account for you
+
+2. Next Create your first project in Data Scienece Experience (DSx)
+
+Go to teh Get Started link and create a new Project. While creating a project it will also create a new Spark Service. Note the name of the Spark Service.
+
+3. Get credential of the Spark As A Service
+
+Login to IBM Cloud. Check the Dashboard. You should see the name of your Spark Service (the SErice Offering would Apache Spark). 
+
+Click your Spark Service. This will open the window which has a link called Service CRedentuial in the left pane. Click that and it will take you to the Credential Window. There youb shall see the available Service Credentials. Click 'View Credential'. This will show you the credentials in a json format. Copy the json string for using in next step.
+
+4. Upload the jar file to Data Scienece Experience (DSx)
+
+Now upload the jar file you created (refer to the section 'Building the jar file' in this document to know how to create the jar file) by followng the guidance in this [link](https://console.bluemix.net/docs/services/AnalyticsforApacheSpark/spark_environment_example.html#example-optional-file-transfer-and-environment-configuration)
+
+The typical command for the upload would look like as below. The value of tenant_id, tenant_secret, instance_id and cluster_master_url you can get from teh credential json you got in last step. The spark-datasource-rest_2.11-2.1.0-SNAPSHOT.jar is the file got created when you run the build instruction in the target folder. You need to run the command below from the target folder. This would upload the jar file to the Spark Instance in your DSx project
+```
+curl \
+    -X PUT \
+    -k \
+    -u ${tenant_id}:${tenant_secret} \
+    -H "X-Spark-service-instance-id: ${instance_id}" \
+    --data-binary "@./spark-datasource-rest_2.11-2.1.0-SNAPSHOT.jar" \
+    ${cluster_master_url}/tenant/data/libs/spark-datasource-rest_2.11-2.1.0-SNAPSHOT.jar" \
+ ```
+ 5. Using this jar in the Notebooks in your DSx project
+ 
+ Now go to DSx andunder the project you created create a new Notebook. You can create either a Scala, Python or R notebook.
+ Now in that notebook use this jar to call the Rest APIs. 
+ 
+ Here is a link to an example Python [Notebook](https://dataplatform.ibm.com/analytics/notebooks/61193405-545e-4c2c-a695-897579f6c172/view?access_token=5fe5dcb472741ef52eebb4fa88ac6f57d2590689685df2716e709b33076144f4). This notebook shows how to use the Rest Data Source for calling Rest APIs
+    
