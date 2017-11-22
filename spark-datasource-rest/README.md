@@ -17,7 +17,7 @@ This library depends on [scalaj_http](https://github.com/scalaj/scalaj-http) pac
 
 ## Building the jar file
 
-Clone/Download this repository in your local system. Go the parent folder (the one which has 'spark-datasource-rest' as one of the sub folders). From the parent older run the command below. This command will create a 'target' folder under the folder 'spark-datasource-rest'. The 'target' folder would have the spark-datasource-rest_2.11-2.1.0-SNAPSHOT.jar which now you can use with any Spark cluster.
+Clone/Download the master repository (Data-Science-Extensions) in your local system. Go the parent folder (the one which has 'spark-datasource-rest' as one of the sub folders). From the parent older run the command below. This command will create a 'target' folder under the folder 'spark-datasource-rest'. The 'target' folder would have the spark-datasource-rest_2.11-2.1.0-SNAPSHOT.jar which now you can use with any Spark cluster.
 
 ```
 mvn clean install -pl spark-datasource-rest -DskipTests -Dscalastyle.skip=true
