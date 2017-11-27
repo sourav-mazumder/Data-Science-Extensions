@@ -245,5 +245,5 @@ curl \
  Now go to DSx andunder the project you created create a new Notebook. You can create either a Scala, Python or R notebook.
  Now in that notebook use this jar to call the Rest APIs. 
  
- Here is a link to an example Python [Notebook](https://dataplatform.ibm.com/analytics/notebooks/61193405-545e-4c2c-a695-897579f6c172/view?access_token=5fe5dcb472741ef52eebb4fa88ac6f57d2590689685df2716e709b33076144f4). This notebook shows how to use the Rest Data Source for calling Rest APIs
+ Here is a link to an example Python [Notebook](https://dataplatform.ibm.com/analytics/notebooks/ae63f056-e267-443e-bfc0-b9331f51d68a/view?access_token=0ec63c6e031aa57d065a4e1c4b71733729db43b1490c331a44323cce28725b7d). This notebook shows how to use the Rest Data Source for calling Socrata Open Data API (SODA) data service
     
