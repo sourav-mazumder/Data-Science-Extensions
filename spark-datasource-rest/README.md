@@ -14,8 +14,16 @@ This library requires Spark 2.0+ .
 
 This library depends on [scalaj_http](https://github.com/scalaj/scalaj-http) package
 
+## Accessing the binary/jar file for this library already available in the release
+
+You can try out the binary/jar file for this library by downloading it from the the Release section of the parent repositoty Data-Science-Extensions.
+
+Click to the name of the repository Data-Science_Extensions. Go to the the Release link under the name of the repositoty. ONce you click there you would fine the link for the file spark-datasource-rest_2.11-2.1.0-SNAPSHOT.jar.zip. Download this file. Uncompress the same. Now you have spark-datasource-rest_2.11-2.1.0-SNAPSHOT.jar to use in your Spark Cluster.
+
 
 ## Building the jar file
+
+In case you want to build the jar file yourself try the following steps. 
 
 Clone/Download the master repository (Data-Science-Extensions) in your local system. Go the parent folder (the one which has 'spark-datasource-rest' as one of the sub folders). From the parent older run the command below. This command will create a 'target' folder under the folder 'spark-datasource-rest'. The 'target' folder would have the spark-datasource-rest_2.11-2.1.0-SNAPSHOT.jar which now you can use with any Spark cluster.
 
@@ -228,7 +236,11 @@ Click your Spark Service. This will open the window which has a link called Serv
 
 4. Upload the jar file to Data Scienece Experience (DSx)
 
-Now upload the jar file you created (refer to the section 'Building the jar file' in this document to know how to create the jar file) by followng the guidance in this [link](https://console.bluemix.net/docs/services/AnalyticsforApacheSpark/spark_environment_example.html#example-optional-file-transfer-and-environment-configuration)
+At first, download the jar file for this library from the release link of the parent repository Data-Science-Expecrience. Follow the steps those have been outlined in the section 'Accessing the binary/jar file for this library already available in the release' of this document. 
+
+Alternatively, you can create the library by following the steps mentioned in the section 'Building the jar file' of this document. 
+
+Next, you can upload the jar file to Data Science Experience by followng the guidance in this [link](https://console.bluemix.net/docs/services/AnalyticsforApacheSpark/spark_environment_example.html#example-optional-file-transfer-and-environment-configuration)
 
 The typical command for the upload would look like as below. The value of tenant_id, tenant_secret, instance_id and cluster_master_url you can get from teh credential json you got in last step. The spark-datasource-rest_2.11-2.1.0-SNAPSHOT.jar is the file got created when you run the build instruction in the target folder. You need to run the command below from the target folder. This would upload the jar file to the Spark Instance in your DSx project
 ```
