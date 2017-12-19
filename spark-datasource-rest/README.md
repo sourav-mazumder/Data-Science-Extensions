@@ -143,9 +143,13 @@ This time we are reading the input parameter values from a csv file - sodainput.
 The csv file should look like this -
 
 region,source
+
 Nevada,nn
+
 Northern California,pr
+
 Virgin Islands region,pr
+
 
 Please ensure that the csv file does not have any space in between the column names as well as in between the values for those columns in the rows.
 
