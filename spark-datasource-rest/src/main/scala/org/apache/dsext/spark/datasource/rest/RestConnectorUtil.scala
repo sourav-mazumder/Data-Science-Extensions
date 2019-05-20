@@ -41,7 +41,8 @@ object RestConnectorUtil {
                      userCredStr: String,
                      connStr: String,
                      contentType: String,
-                     respType: String): Any = {
+                     respType: String,
+                     authToken: String): Any = {
 
 
     // print("path in callRestAPI : " + uri + " , method : " + method + ", content type : " +
@@ -50,11 +51,10 @@ object RestConnectorUtil {
 
 
     var httpc = (method: @switch) match {
-      case "GET" => Http(addQryParmToUri(uri, data)).header("contenty-type",
-                     "application/x-www-form-urlencoded")
+      case "GET" => Http(addQryParmToUri(uri, data)).header("Content-Type","application/x-www-form-urlencoded").header("Authorization",authToken)
       case "PUT" => Http(uri).put(data).header("content-type", contentType)
       case "DELETE" => Http(uri).method("DELETE")
-      case "POST" => Http(uri).postData(data).header("content-type", contentType)
+      case "POST" => Http(uri).postData(data).header("Content-Type", contentType).header("Authorization",authToken)
     }
 
     val conns = connStr.split(":")
@@ -127,7 +127,14 @@ object RestConnectorUtil {
     val outArrB : ArrayBuffer[String] = new ArrayBuffer[String](keysLength)
 
     while (cnt < keysLength) {
-        outArrB += "\"" + keys(cnt) + "\":\"" + values(cnt) + "\""
+        if(values(cnt).startsWith("[") || values(cnt).startsWith("{")) //complex datatype (arrays or objects) and it was cast to string
+        {
+          outArrB += "\"" + keys(cnt) + "\":" + values(cnt)
+        }
+        else //simple datatype
+        {
+          outArrB += "\"" + keys(cnt) + "\":\"" + values(cnt) + "\""
+        }
         cnt += 1
     }
 
@@ -157,7 +164,14 @@ object RestConnectorUtil {
     val outArrB : ArrayBuffer[String] = new ArrayBuffer[String](keysLength)
 
     while (cnt < keysLength) {
-        outArrB += "\"" + keys(cnt) + "\":\"" + values(cnt) + "\""
+        if(values(cnt).startsWith("[") || values(cnt).startsWith("{")) //complex datatype (arrays or objects)
+        {
+          outArrB += "\"" + keys(cnt) + "\":" + values(cnt)
+        }
+        else //simple datatype
+        {
+          outArrB += "\"" + keys(cnt) + "\":\"" + values(cnt) + "\""
+        }
         cnt += 1
     }
 

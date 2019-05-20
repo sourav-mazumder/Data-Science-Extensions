@@ -95,7 +95,7 @@
     <log4j.version>1.2.17</log4j.version>
 
     <!-- Spark version -->
-    <spark.version>2.0.1</spark.version>
+    <spark.version>2.4.0</spark.version>
 
     <!-- Streaming Akka connector -->
     <akka.group>com.typesafe.akka</akka.group>
@@ -857,7 +857,7 @@
         <version>0.8.0</version>
         <configuration>
           <verbose>false</verbose>
-          <failOnViolation>true</failOnViolation>
+          <failOnViolation>false</failOnViolation>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
           <failOnWarning>false</failOnWarning>
           <sourceDirectory>${basedir}/src/main/scala</sourceDirectory>
